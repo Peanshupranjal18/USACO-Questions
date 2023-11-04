@@ -1,3 +1,6 @@
+// problem statement
+// http://www.usaco.org/index.php?page=viewproblem2&cpid=993#
+
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
