@@ -36,7 +36,7 @@ using namespace __gnu_pbds;
 // Right Left Up Down
 intt dx[] = {0, 0, 1, -1};
 intt dy[] = {1, -1, 0, 0};
-intt n, m, a, b, c;
+intt n, m, a, b;
 
 bool possible(int x, int y)
 {
@@ -44,6 +44,7 @@ bool possible(int x, int y)
 }
 
 vi v, v1, v2, v3, v4;
+intt dp[200001][3];
 vi adj[200001];
 
 bool isPrime(intt n)
@@ -64,38 +65,40 @@ bool isPrime(intt n)
 template <class T>
 using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-const intt MAX_DAYS = 1000;
+void dfs(int v, int p = 0)
+{
+    for (const int &e : adj[v])
+    {
+        if (e != p)
+        {
+            dfs(e, v);
+            dp[v][0] *= dp[e][1] + dp[e][2];
+            dp[v][1] *= dp[e][0] + dp[e][2];
+            dp[v][2] *= dp[e][0] + dp[e][1];
+            dp[v][0] %= MOD;
+            dp[v][1] %= MOD;
+            dp[v][2] %= MOD;
+        }
+    }
+}
 
 void solve()
 {
-    freopen("time.in", "r", stdin);
-    freopen("time.out", "w", stdout);
-    cin >> n >> m >> a;
-    v.rs(n);
-    f(i, n) cin >> v[i];
-    f(i, m)
+    cin >> n >> m;
+    f(i, n - 1)
     {
-        cin >> b >> c;
-        adj[--b].pb(--c);
+        cin >> a >> b;
+        adj[a].pb(b);
+        adj[b].pb(a);
     }
-    vvi dp(MAX_DAYS + 1, vi(n, -1));
-    dp[0][0] = 0;
-    intt ans = 0;
-    f(d, MAX_DAYS)
+    ff(i, 1, n + 1) dp[i][0] = 1, dp[i][1] = 1, dp[i][2] = 1;
+    while (m--)
     {
-        f(i, n)
-        {
-            if (dp[d][i] != -1)
-            {
-                for (intt u : adj[i])
-                {
-                    dp[d + 1][u] = max(dp[d + 1][u], dp[d][i] + v[u]);
-                }
-            }
-        }
-        ans = max(ans, (dp[d][0] - (a * d * d)));
+        cin >> a >> b;
+        dp[a][0] = 0, dp[a][1] = 0, dp[a][2] = 0, dp[a][b - 1] = 1;
     }
-    cout << ans << "\n";
+    dfs(1);
+    cout << (dp[1][0] + dp[1][1] + dp[1][2]) % MOD << endl;
 }
 
 int32_t main()
@@ -103,7 +106,9 @@ int32_t main()
     ios_base::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-    // intt tc;cin>>tc;while(tc--)
+    // intt tc;
+    // cin >> tc;
+    // while (tc--)
     solve();
     return 0;
 }
