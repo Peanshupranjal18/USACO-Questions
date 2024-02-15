@@ -66,6 +66,31 @@ using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node
 
 void solve()
 {
+    freopen("breedflip.in", "r", stdin);
+    freopen("breedflip.out", "w", stdout);
+    ll n;
+    cin >> n;
+    string A;
+    string B;
+    cin >> A >> B;
+    ll ans = 0;
+    bool mismatched = false;
+    for (ll i = 0; i < n; i++)
+    {
+        if (A[i] != B[i])
+        {
+            if (!mismatched)
+            {
+                mismatched = true;
+                ans++;
+            }
+        }
+        else
+        {
+            mismatched = false;
+        }
+    }
+    cout << ans << endl;
 }
 
 int32_t main()
@@ -73,9 +98,9 @@ int32_t main()
     ios_base::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-    intt tc;
-    cin >> tc;
-    while (tc--)
-        solve();
+    // intt tc;
+    // cin >> tc;
+    // while (tc--)
+    solve();
     return 0;
 }
